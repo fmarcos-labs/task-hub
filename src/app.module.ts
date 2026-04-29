@@ -6,6 +6,7 @@ import { LoggerModule } from 'nestjs-pino';
 import { ENV_KEYS } from '@config/env.constants.js';
 import { EnvModule } from './config/env.module';
 import { HealthModule } from './health/health.module';
+import { TasksModule } from './modules/tasks/index.js';
 import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { GLOBAL_VALIDATION_PIPE } from './common/pipes/validation.pipe';
@@ -42,6 +43,7 @@ import { GLOBAL_VALIDATION_PIPE } from './common/pipes/validation.pipe';
     }),
 
     HealthModule,
+    TasksModule,
   ],
   providers: [
     { provide: APP_FILTER, useClass: GlobalExceptionFilter },

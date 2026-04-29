@@ -7,7 +7,7 @@ Dashboard unificado de tareas (Apple Reminders + Todoist) corriendo en NestJS so
 | Fase | Nombre                                                     | Prioridad | Status        | Depende de     |
 | ---- | ---------------------------------------------------------- | --------- | ------------- | -------------- |
 | 0    | [Adaptar plantilla](FASE_0_BASE.md)                        | Alta      | ✅ COMPLETADO | —              |
-| 1    | [TasksModule + DTO unificado](FASE_1_TASKS_MODULE.md)      | Alta      | ⏸️ PENDIENTE  | FASE_0         |
+| 1    | [TasksModule + DTO unificado](FASE_1_TASKS_MODULE.md)      | Alta      | ✅ COMPLETADO | FASE_0         |
 | 2    | [Reminders source (remindctl)](FASE_2_REMINDERS_SOURCE.md) | Alta      | ⏸️ PENDIENTE  | FASE_1         |
 | 3    | [Todoist source (REST v2)](FASE_3_TODOIST_SOURCE.md)       | Alta      | ⏸️ PENDIENTE  | FASE_1         |
 | 4    | [Caché in-memory + refresh](FASE_4_CACHE_REFRESH.md)       | Alta      | ⏸️ PENDIENTE  | FASE_2, FASE_3 |

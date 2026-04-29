@@ -4,15 +4,15 @@ Dashboard unificado de tareas: Apple Reminders + Todoist.
 
 ## Fases de Desarrollo
 
-| Fase                            | Status         |
-| ------------------------------- | -------------- |
-| FASE_0: Adaptar plantilla       | ✅ COMPLETADO  |
-| FASE_1: TasksModule + DTO       | 🔄 EN PROGRESO |
-| FASE_2: Reminders source        | ⏸️ PENDIENTE   |
-| FASE_3: Todoist source          | ⏸️ PENDIENTE   |
-| FASE_4: Cache + refresh         | ⏸️ PENDIENTE   |
-| FASE_5: Health + Swagger        | ⏸️ PENDIENTE   |
-| FASE_6: Deploy PM2 + Cloudflare | ⏸️ PENDIENTE   |
+| Fase                            | Status        |
+| ------------------------------- | ------------- |
+| FASE_0: Adaptar plantilla       | ✅ COMPLETADO |
+| FASE_1: TasksModule + DTO       | ✅ COMPLETADO |
+| FASE_2: Reminders source        | ⏸️ PENDIENTE  |
+| FASE_3: Todoist source          | ⏸️ PENDIENTE  |
+| FASE_4: Cache + refresh         | ⏸️ PENDIENTE  |
+| FASE_5: Health + Swagger        | ⏸️ PENDIENTE  |
+| FASE_6: Deploy PM2 + Cloudflare | ⏸️ PENDIENTE  |
 
 ## Quick Start
 
