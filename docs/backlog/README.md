@@ -12,7 +12,7 @@ Dashboard unificado de tareas (Apple Reminders + Todoist) corriendo en NestJS so
 | 3    | [Todoist source (REST v2)](FASE_3_TODOIST_SOURCE.md)       | Alta      | ✅ COMPLETADO | FASE_1         |
 | 4    | [Caché in-memory + refresh](FASE_4_CACHE_REFRESH.md)       | Alta      | ✅ COMPLETADO | FASE_2, FASE_3 |
 | 5    | [Health + Swagger](FASE_5_HEALTH_SWAGGER.md)               | Media     | ✅ COMPLETADO | FASE_4         |
-| 6    | [Deploy PM2 + Cloudflare](FASE_6_DEPLOY.md)                | Media     | ⏸️ PENDIENTE  | FASE_5         |
+| 6    | [Deploy PM2 + Cloudflare](FASE_6_DEPLOY.md)                | Media     | ✅ COMPLETADO | FASE_5         |
 
 ## Diagramas de Referencia
 

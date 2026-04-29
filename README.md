@@ -12,7 +12,7 @@ Dashboard unificado de tareas: Apple Reminders + Todoist.
 | FASE_3: Todoist source          | ✅ COMPLETADO |
 | FASE_4: Cache + refresh         | ✅ COMPLETADO |
 | FASE_5: Health + Swagger        | ✅ COMPLETADO |
-| FASE_6: Deploy PM2 + Cloudflare | ⏸️ PENDIENTE  |
+| FASE_6: Deploy PM2 + Cloudflare | ✅ COMPLETADO |
 
 ## Quick Start
 
@@ -68,12 +68,44 @@ Ver `.env.example` para la lista completa.
 
 ## Deploy
 
-```bash
-# Build de imagen
-docker build -t task-hub .
+### PM2 (Mac Mini)
 
-# Produccion (PM2 + Cloudflare Tunnel)
-pm2 start dist/main.js --name task-hub
+```bash
+# 1. Instalar dependencias y build
+pnpm install
+pnpm build
+
+# 2. Configurar variables de entorno
+cp .env.example .env
+# Editar TODOIST_API_TOKEN con tu token de Todoist
+# Editar CORS_ORIGINS=https://tasks.fmarcos.dev
+
+# 3. Iniciar con PM2
+pm2 start ecosystem.config.cjs
+
+# 4. Guardar configuración
+pm2 save
+
+# 5. Verificar
+pm2 list
+pm2 logs task-hub
+```
+
+### Cloudflare Tunnel
+
+En `~/.cloudflared/config.yml`:
+
+```yaml
+- hostname: tasks.fmarcos.dev
+  service: http://localhost:3002
+```
+
+Comandos:
+
+```bash
+cloudflared tunnel route dns mac-mini tasks.fmarcos.dev
+launchctl unload ~/Library/LaunchAgents/com.cloudflare.cloudflared.plist
+launchctl load ~/Library/LaunchAgents/com.cloudflare.cloudflared.plist
 ```
 
 Puerto por defecto: `3002`
