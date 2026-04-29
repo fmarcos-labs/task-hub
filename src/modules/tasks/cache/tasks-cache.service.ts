@@ -1,19 +1,24 @@
-import { Injectable, Logger, Inject } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { UnifiedTaskDto } from '../dto/index.js';
 import type { ITaskSource } from '../sources/task-source.interface.js';
+import { RemindersSource } from '../sources/reminders/reminders.source.js';
+import { TodoistSource } from '../sources/todoist/todoist.source.js';
 
 export const TASK_SOURCES = 'TASK_SOURCES';
 
 @Injectable()
 export class TasksCacheService {
   private readonly logger = new Logger(TasksCacheService.name);
+  private readonly sources: ITaskSource[];
 
   private tasks: UnifiedTaskDto[] = [];
   private lastRefreshAt: Date | null = null;
   private refreshing: Promise<{ count: number; refreshedAt: string }> | null =
     null;
 
-  constructor(@Inject(TASK_SOURCES) private readonly sources: ITaskSource[]) {}
+  constructor(remindersSource: RemindersSource, todoistSource: TodoistSource) {
+    this.sources = [remindersSource, todoistSource];
+  }
 
   getAll(): UnifiedTaskDto[] {
     return this.tasks;

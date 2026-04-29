@@ -33,21 +33,23 @@ describe('TodoistClient', () => {
           content: 'Task 1',
           description: '',
           project_id: 'p1',
-          is_completed: false,
+          checked: false,
           priority: 1 as const,
           due: null,
-          created_at: '',
+          added_at: '',
         },
       ];
       (global.fetch as jest.Mock).mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockTasks),
+        json: jest
+          .fn()
+          .mockResolvedValue({ results: mockTasks, next_cursor: null }),
       });
 
       const result = await client.getTasks();
 
       expect(global.fetch).toHaveBeenCalledWith(
-        'https://api.todoist.com/rest/v2/tasks',
+        'https://api.todoist.com/api/v1/tasks',
         expect.objectContaining({
           headers: { Authorization: 'Bearer fake-token' },
         }),
@@ -99,7 +101,9 @@ describe('TodoistClient', () => {
       ];
       (global.fetch as jest.Mock).mockResolvedValue({
         ok: true,
-        json: jest.fn().mockResolvedValue(mockProjects),
+        json: jest
+          .fn()
+          .mockResolvedValue({ results: mockProjects, next_cursor: null }),
       });
 
       const result = await client.getProjects();

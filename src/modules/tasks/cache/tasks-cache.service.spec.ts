@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { TasksCacheService, TASK_SOURCES } from './tasks-cache.service';
+import { TasksCacheService } from './tasks-cache.service';
 import { UnifiedTaskDto, TaskSource, TaskPriority } from '../dto';
-import type { ITaskSource } from '../sources/task-source.interface';
+import { RemindersSource } from '../sources/reminders/reminders.source';
+import { TodoistSource } from '../sources/todoist/todoist.source';
 
 describe('TasksCacheService', () => {
   let service: TasksCacheService;
-  let mockSources: ITaskSource[];
+  let mockReminders: jest.Mocked<RemindersSource>;
+  let mockTodoist: jest.Mocked<TodoistSource>;
 
   const createMockTask = (id: string, source: TaskSource): UnifiedTaskDto => ({
     id,
@@ -16,15 +18,21 @@ describe('TasksCacheService', () => {
   });
 
   beforeEach(async () => {
-    mockSources = [
-      { name: TaskSource.REMINDERS, fetch: jest.fn().mockResolvedValue([]) },
-      { name: TaskSource.TODOIST, fetch: jest.fn().mockResolvedValue([]) },
-    ] as ITaskSource[];
+    mockReminders = {
+      name: TaskSource.REMINDERS,
+      fetch: jest.fn().mockResolvedValue([]),
+    } as unknown as jest.Mocked<RemindersSource>;
+
+    mockTodoist = {
+      name: TaskSource.TODOIST,
+      fetch: jest.fn().mockResolvedValue([]),
+    } as unknown as jest.Mocked<TodoistSource>;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TasksCacheService,
-        { provide: TASK_SOURCES, useValue: mockSources },
+        { provide: RemindersSource, useValue: mockReminders },
+        { provide: TodoistSource, useValue: mockTodoist },
       ],
     }).compile();
 
@@ -43,8 +51,8 @@ describe('TasksCacheService', () => {
         createMockTask('tdo-1', TaskSource.TODOIST),
       ];
 
-      (mockSources[0].fetch as jest.Mock).mockResolvedValue([mockTasks[0]]);
-      (mockSources[1].fetch as jest.Mock).mockResolvedValue([mockTasks[1]]);
+      mockReminders.fetch.mockResolvedValue([mockTasks[0]]);
+      mockTodoist.fetch.mockResolvedValue([mockTasks[1]]);
 
       await service.refresh();
 
@@ -57,10 +65,10 @@ describe('TasksCacheService', () => {
 
   describe('refresh', () => {
     it('should fetch from all sources and merge', async () => {
-      (mockSources[0].fetch as jest.Mock).mockResolvedValue([
+      mockReminders.fetch.mockResolvedValue([
         createMockTask('rem-1', TaskSource.REMINDERS),
       ]);
-      (mockSources[1].fetch as jest.Mock).mockResolvedValue([
+      mockTodoist.fetch.mockResolvedValue([
         createMockTask('tdo-1', TaskSource.TODOIST),
       ]);
 
@@ -71,10 +79,8 @@ describe('TasksCacheService', () => {
     });
 
     it('should not break if one source fails', async () => {
-      (mockSources[0].fetch as jest.Mock).mockRejectedValue(
-        new Error('Source failed'),
-      );
-      (mockSources[1].fetch as jest.Mock).mockResolvedValue([
+      mockReminders.fetch.mockRejectedValue(new Error('Source failed'));
+      mockTodoist.fetch.mockResolvedValue([
         createMockTask('tdo-1', TaskSource.TODOIST),
       ]);
 
@@ -85,17 +91,17 @@ describe('TasksCacheService', () => {
     });
 
     it('should deduplicate concurrent refreshes', async () => {
-      (mockSources[0].fetch as jest.Mock).mockResolvedValue([
+      mockReminders.fetch.mockResolvedValue([
         createMockTask('rem-1', TaskSource.REMINDERS),
       ]);
-      (mockSources[1].fetch as jest.Mock).mockResolvedValue([]);
+      mockTodoist.fetch.mockResolvedValue([]);
 
       const [result1, result2] = await Promise.all([
         service.refresh(),
         service.refresh(),
       ]);
 
-      expect(mockSources[0].fetch).toHaveBeenCalledTimes(1);
+      expect(mockReminders.fetch).toHaveBeenCalledTimes(1);
       expect(result1.count).toBe(1);
       expect(result2.count).toBe(1);
     });
@@ -107,10 +113,10 @@ describe('TasksCacheService', () => {
     });
 
     it('should return ISO string after refresh', async () => {
-      (mockSources[0].fetch as jest.Mock).mockResolvedValue([
+      mockReminders.fetch.mockResolvedValue([
         createMockTask('rem-1', TaskSource.REMINDERS),
       ]);
-      (mockSources[1].fetch as jest.Mock).mockResolvedValue([]);
+      mockTodoist.fetch.mockResolvedValue([]);
 
       await service.refresh();
 

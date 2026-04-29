@@ -25,6 +25,6 @@ export function toUnifiedTask(
     source: TaskSource.TODOIST,
     priority: mapPriority(task.priority),
     list: projectsById.get(task.project_id)?.name,
-    completed: task.is_completed,
+    completed: task.checked,
   };
 }

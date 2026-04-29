@@ -1,4 +1,4 @@
-#  CLAUDE.md
+# CLAUDE.md
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
@@ -12,18 +12,18 @@ El repo arranca desde la base `template-nest` (NestJS + Fastify + Prisma + Postg
 
 Gestor: **pnpm**. Node 22.
 
-| Comando                | Uso                                                       |
-| ---------------------- | --------------------------------------------------------- |
-| `pnpm dev`             | Watch mode (`nest start --watch`)                         |
-| `pnpm build`           | `nest build && tsc-alias` (resuelve aliases en dist)      |
-| `pnpm start:prod`      | Ejecutar `dist/main.js`                                   |
-| `pnpm lint`            | ESLint + Prettier con `--fix`                             |
-| `pnpm type-check`      | `tsc --noEmit`                                            |
-| `pnpm test`            | Jest unitarios (`*.spec.ts` bajo `src/`)                  |
-| `pnpm test:cov`        | Tests con coverage                                        |
-| `pnpm test:e2e`        | E2E con `test/jest-e2e.json` (requiere `DATABASE_URL`)    |
-| `pnpm prisma:generate` | Generar Prisma client                                     |
-| `pnpm prisma:migrate`  | `prisma migrate dev`                                      |
+| Comando                | Uso                                                    |
+| ---------------------- | ------------------------------------------------------ |
+| `pnpm dev`             | Watch mode (`nest start --watch`)                      |
+| `pnpm build`           | `nest build && tsc-alias` (resuelve aliases en dist)   |
+| `pnpm start:prod`      | Ejecutar `dist/main.js`                                |
+| `pnpm lint`            | ESLint + Prettier con `--fix`                          |
+| `pnpm type-check`      | `tsc --noEmit`                                         |
+| `pnpm test`            | Jest unitarios (`*.spec.ts` bajo `src/`)               |
+| `pnpm test:cov`        | Tests con coverage                                     |
+| `pnpm test:e2e`        | E2E con `test/jest-e2e.json` (requiere `DATABASE_URL`) |
+| `pnpm prisma:generate` | Generar Prisma client                                  |
+| `pnpm prisma:migrate`  | `prisma migrate dev`                                   |
 
 Correr un test único: `pnpm test -- src/health/health.controller.spec.ts` (o `-t "<nombre>"`).
 
@@ -50,6 +50,11 @@ Aplicación NestJS sobre Fastify; bootstrap en `src/main.ts` registra Helmet, CO
 ### Path aliases
 
 `tsconfig.json` define `@modules/*`, `@common/*`, `@config/*`, `@database/*`. Replicados en `jest.moduleNameMapper` y resueltos en build con `tsc-alias`. Imports internos deben usar el alias correspondiente.
+
+## Reglas aprendidas
+
+- **NestJS multi-injection no funciona con el mismo token**: registrar `{ provide: TOKEN, useExisting: X }` dos veces hace que solo el último gane — no crea un array. Para inyectar una colección: recibir cada dependencia individualmente en el constructor y armar el array manualmente, o usar `useFactory`.
+- **Actualizar specs al cambiar interfaces**: al renombrar campos de un type/interface (ej: `is_completed` → `checked`, `created_at` → `added_at`), buscar y corregir todos los `*.spec.ts` que usen ese tipo como fixture — el compilador no siempre detecta fixtures con casteos parciales.
 
 ## Convenciones específicas
 

@@ -13,7 +13,7 @@ export class RemindersSource implements ITaskSource {
     try {
       const start = Date.now();
       const output = await runRemindctl();
-      const tasks = output.reminders.map(toUnifiedTask);
+      const tasks = (output.reminders ?? []).map(toUnifiedTask);
       this.logger.log(
         `Fetched ${tasks.length} reminders in ${Date.now() - start}ms`,
       );

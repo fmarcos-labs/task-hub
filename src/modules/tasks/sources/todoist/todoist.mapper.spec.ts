@@ -10,7 +10,7 @@ describe('todoist.mapper', () => {
         content: 'Buy milk',
         description: '',
         project_id: 'proj-1',
-        is_completed: false,
+        checked: false,
         priority: 3,
         due: {
           date: '2024-01-15',
@@ -18,7 +18,7 @@ describe('todoist.mapper', () => {
           timezone: null,
           is_recurring: false,
         },
-        created_at: '2024-01-01T00:00:00Z',
+        added_at: '2024-01-01T00:00:00Z',
       };
       const projects = new Map<string, TodoistProject>([
         [
@@ -50,10 +50,10 @@ describe('todoist.mapper', () => {
         content: 'High priority',
         description: '',
         project_id: 'proj-1',
-        is_completed: false,
+        checked: false,
         priority: 4,
         due: null,
-        created_at: '2024-01-01T00:00:00Z',
+        added_at: '2024-01-01T00:00:00Z',
       };
 
       const result = toUnifiedTask(task, new Map());
@@ -66,10 +66,10 @@ describe('todoist.mapper', () => {
         content: 'Medium priority',
         description: '',
         project_id: 'proj-1',
-        is_completed: false,
+        checked: false,
         priority: 3,
         due: null,
-        created_at: '2024-01-01T00:00:00Z',
+        added_at: '2024-01-01T00:00:00Z',
       };
 
       const result = toUnifiedTask(task, new Map());
@@ -82,10 +82,10 @@ describe('todoist.mapper', () => {
         content: 'Low priority',
         description: '',
         project_id: 'proj-1',
-        is_completed: false,
+        checked: false,
         priority: 2,
         due: null,
-        created_at: '2024-01-01T00:00:00Z',
+        added_at: '2024-01-01T00:00:00Z',
       };
 
       const result = toUnifiedTask(task, new Map());
@@ -98,10 +98,10 @@ describe('todoist.mapper', () => {
         content: 'No priority',
         description: '',
         project_id: 'proj-1',
-        is_completed: false,
+        checked: false,
         priority: 1,
         due: null,
-        created_at: '2024-01-01T00:00:00Z',
+        added_at: '2024-01-01T00:00:00Z',
       };
 
       const result = toUnifiedTask(task, new Map());
@@ -114,10 +114,10 @@ describe('todoist.mapper', () => {
         content: 'Minimal task',
         description: '',
         project_id: 'proj-1',
-        is_completed: true,
+        checked: true,
         priority: 1,
         due: null,
-        created_at: '2024-01-01T00:00:00Z',
+        added_at: '2024-01-01T00:00:00Z',
       };
 
       const result = toUnifiedTask(task, new Map());
