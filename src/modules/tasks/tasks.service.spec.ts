@@ -1,36 +1,31 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { TasksService } from './tasks.service';
-import { RemindersSource } from './sources/reminders/reminders.source';
-import { TodoistSource } from './sources/todoist/todoist.source';
-import { TaskSource } from './dto/index';
+import { TasksCacheService } from './cache/tasks-cache.service';
+import { TaskSource, TaskPriority } from './dto';
 
 describe('TasksService', () => {
   let service: TasksService;
-  let remindersSource: RemindersSource;
-  let todoistSource: TodoistSource;
+  let cache: TasksCacheService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TasksService,
         {
-          provide: RemindersSource,
+          provide: TasksCacheService,
           useValue: {
-            fetch: jest.fn().mockResolvedValue([]),
-          },
-        },
-        {
-          provide: TodoistSource,
-          useValue: {
-            fetch: jest.fn().mockResolvedValue([]),
+            getAll: jest.fn().mockReturnValue([]),
+            refresh: jest.fn().mockResolvedValue({
+              count: 0,
+              refreshedAt: new Date().toISOString(),
+            }),
           },
         },
       ],
     }).compile();
 
     service = module.get<TasksService>(TasksService);
-    remindersSource = module.get<RemindersSource>(RemindersSource);
-    todoistSource = module.get<TodoistSource>(TodoistSource);
+    cache = module.get<TasksCacheService>(TasksCacheService);
   });
 
   it('should be defined', () => {
@@ -38,69 +33,32 @@ describe('TasksService', () => {
   });
 
   describe('getTasks', () => {
-    it('should return empty array when both sources return empty', async () => {
-      const tasks = await service.getTasks();
-      expect(tasks).toEqual([]);
-      expect(remindersSource.fetch).toHaveBeenCalled();
-      expect(todoistSource.fetch).toHaveBeenCalled();
-    });
-
-    it('should return combined tasks from both sources', async () => {
-      const reminderTask = {
-        id: 'rem-123',
-        title: 'Reminder task',
-        source: TaskSource.REMINDERS,
-        priority: 'none' as const,
-        completed: false,
-      };
-      const todoistTask = {
-        id: 'tdo-456',
-        title: 'Todoist task',
-        source: TaskSource.TODOIST,
-        priority: 'none' as const,
-        completed: false,
-      };
-      (remindersSource.fetch as jest.Mock).mockResolvedValue([reminderTask]);
-      (todoistSource.fetch as jest.Mock).mockResolvedValue([todoistTask]);
+    it('should return tasks from cache', async () => {
+      const mockTasks = [
+        {
+          id: 'rem-123',
+          title: 'Task 1',
+          source: TaskSource.REMINDERS,
+          priority: TaskPriority.NONE,
+          completed: false,
+        },
+      ];
+      (cache.getAll as jest.Mock).mockReturnValue(mockTasks);
 
       const tasks = await service.getTasks();
 
-      expect(tasks).toHaveLength(2);
-      expect(tasks[0].id).toBe('rem-123');
-      expect(tasks[1].id).toBe('tdo-456');
+      expect(tasks).toEqual(mockTasks);
+      expect(cache.getAll).toHaveBeenCalled();
     });
   });
 
   describe('refresh', () => {
-    it('should return count 0 and ISO timestamp', async () => {
+    it('should call cache refresh', async () => {
       const result = await service.refresh();
 
-      expect(result.count).toBe(0);
+      expect(cache.refresh).toHaveBeenCalled();
+      expect(result.count).toBeDefined();
       expect(result.refreshedAt).toBeDefined();
-      expect(() => new Date(result.refreshedAt)).not.toThrow();
-    });
-
-    it('should return combined count from both sources', async () => {
-      const reminderTask = {
-        id: 'rem-1',
-        title: 'R1',
-        source: TaskSource.REMINDERS,
-        priority: 'none' as const,
-        completed: false,
-      };
-      const todoistTask = {
-        id: 'tdo-1',
-        title: 'T1',
-        source: TaskSource.TODOIST,
-        priority: 'none' as const,
-        completed: false,
-      };
-      (remindersSource.fetch as jest.Mock).mockResolvedValue([reminderTask]);
-      (todoistSource.fetch as jest.Mock).mockResolvedValue([todoistTask]);
-
-      const result = await service.refresh();
-
-      expect(result.count).toBe(2);
     });
   });
 });
