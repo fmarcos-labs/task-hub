@@ -38,30 +38,52 @@ export class TodoistClient {
   }
 
   async getTasks(): Promise<TodoistTask[]> {
-    const response = await this.fetchWithTimeout(`${BASE_URL}/tasks`);
+    const all: TodoistTask[] = [];
+    let cursor: string | null = null;
 
-    if (!response.ok) {
-      throw new TodoistApiError(
-        `Todoist API error: ${response.status} ${response.statusText}`,
-        response.status,
-      );
-    }
+    do {
+      const url = cursor
+        ? `${BASE_URL}/tasks?cursor=${cursor}`
+        : `${BASE_URL}/tasks`;
+      const response = await this.fetchWithTimeout(url);
 
-    const data = (await response.json()) as TodoistTasksResponse;
-    return data.results;
+      if (!response.ok) {
+        throw new TodoistApiError(
+          `Todoist API error: ${response.status} ${response.statusText}`,
+          response.status,
+        );
+      }
+
+      const data = (await response.json()) as TodoistTasksResponse;
+      all.push(...data.results);
+      cursor = data.next_cursor;
+    } while (cursor !== null);
+
+    return all;
   }
 
   async getProjects(): Promise<TodoistProject[]> {
-    const response = await this.fetchWithTimeout(`${BASE_URL}/projects`);
+    const all: TodoistProject[] = [];
+    let cursor: string | null = null;
 
-    if (!response.ok) {
-      throw new TodoistApiError(
-        `Todoist API error: ${response.status} ${response.statusText}`,
-        response.status,
-      );
-    }
+    do {
+      const url = cursor
+        ? `${BASE_URL}/projects?cursor=${cursor}`
+        : `${BASE_URL}/projects`;
+      const response = await this.fetchWithTimeout(url);
 
-    const data = (await response.json()) as TodoistProjectsResponse;
-    return data.results;
+      if (!response.ok) {
+        throw new TodoistApiError(
+          `Todoist API error: ${response.status} ${response.statusText}`,
+          response.status,
+        );
+      }
+
+      const data = (await response.json()) as TodoistProjectsResponse;
+      all.push(...data.results);
+      cursor = data.next_cursor;
+    } while (cursor !== null);
+
+    return all;
   }
 }
