@@ -16,6 +16,6 @@ jobs:
           if pm2 describe "task-hub" > /dev/null 2>&1; then
             pm2 reload "task-hub" --update-env
           else
-            pm2 start npm --name "task-hub" -- start
+            pm2 start dist/main.js --name "task-hub"
             pm2 save
           fi
