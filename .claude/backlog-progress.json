@@ -1,0 +1,14 @@
+{
+  "project": "task-hub",
+  "tech": "NestJS 11 + Fastify (Node 22, pnpm)",
+  "current_phase": "FASE_0",
+  "phases": {
+    "FASE_0": { "status": "pending", "name": "Adaptar plantilla", "tasks": 0, "total": 5 },
+    "FASE_1": { "status": "pending", "name": "TasksModule + DTO unificado", "tasks": 0, "total": 6 },
+    "FASE_2": { "status": "pending", "name": "Reminders source (remindctl)", "tasks": 0, "total": 5 },
+    "FASE_3": { "status": "pending", "name": "Todoist source (REST v2)", "tasks": 0, "total": 5 },
+    "FASE_4": { "status": "pending", "name": "Cache in-memory + refresh periodico", "tasks": 0, "total": 4 },
+    "FASE_5": { "status": "pending", "name": "Health + Swagger", "tasks": 0, "total": 3 },
+    "FASE_6": { "status": "pending", "name": "Deploy PM2 + Cloudflare", "tasks": 0, "total": 4 }
+  }
+}

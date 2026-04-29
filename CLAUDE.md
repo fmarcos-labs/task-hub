@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project context
 
-`task-hub` es un dashboard unificado de tareas (Apple Reminders + Todoist) que correrá en un Mac Mini personal vía PM2 y Cloudflare Tunnel (`tasks.fmarcos.dev`). Ver `concepto.md` para arquitectura objetivo y checklist de implementación.
+`task-hub` es un dashboard unificado de tareas (Apple Reminders + Todoist) que correrá en un Mac Mini personal vía PM2 y Cloudflare Tunnel (`tasks.fmarcos.dev`). Ver `docs/_CONCEPTO.md` para arquitectura objetivo y checklist de implementación, y `docs/backlog/README.md` para el plan de fases.
 
-El repo arranca desde la base `template-nest` (NestJS + Fastify + Prisma + PostgreSQL). Todavía contiene andamiaje de la plantilla (`prisma/`, módulo `Example`, `DATABASE_URL`) que debe **adaptarse o eliminarse** al implementar el dominio real (`TasksModule`, sin DB, puerto 3002, token de Todoist). El `README.md` describe la plantilla, no el producto final.
+El repo arranca desde la base `template-nest` (NestJS + Fastify + Prisma + PostgreSQL). Todavía contiene andamiaje de la plantilla (`prisma/`, módulo `Example`, `DATABASE_URL`) que debe **adaptarse o eliminarse** al implementar el dominio real (`TasksModule`, sin DB, puerto 3002, token de Todoist) — el plan está en `docs/backlog/`. El `README.md` describe la plantilla, no el producto final.
 
 ## Comandos
 

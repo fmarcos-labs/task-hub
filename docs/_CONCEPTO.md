@@ -1,3 +1,10 @@
+# Concepto Inicial del Proyecto
+
+> Documento de origen — no editar. Refleja la idea original con la que se generó el backlog.
+> Fecha: 2026-04-29
+
+---
+
 # Task Hub — Concepto
 
 Dashboard unificado de tareas del Mac Mini personal.
