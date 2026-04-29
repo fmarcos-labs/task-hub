@@ -106,8 +106,11 @@
     "moduleNameMapper": {
       "^(\\.{1,2}/.*)\\.js$": "$1",
       "^@modules/(.*)$": "<rootDir>/modules/$1",
+      "^@modules/(.*)\\.js$": "<rootDir>/modules/$1",
       "^@common/(.*)$": "<rootDir>/common/$1",
-      "^@config/(.*)$": "<rootDir>/config/$1"
+      "^@common/(.*)\\.js$": "<rootDir>/common/$1",
+      "^@config/(.*)$": "<rootDir>/config/$1",
+      "^@config/(.*)\\.js$": "<rootDir>/config/$1"
     }
   }
 }
