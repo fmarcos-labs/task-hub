@@ -4,10 +4,7 @@ WORKDIR /app
 
 FROM base AS deps
 COPY package.json pnpm-lock.yaml ./
-COPY prisma/schema.prisma ./prisma/
-COPY prisma.config.ts ./
 RUN pnpm install --frozen-lockfile
-RUN pnpm prisma generate
 
 FROM base AS build
 COPY --from=deps /app/node_modules ./node_modules
@@ -20,5 +17,5 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 COPY package.json ./
 
-EXPOSE 3000
+EXPOSE 3002
 CMD ["node", "dist/main.js"]

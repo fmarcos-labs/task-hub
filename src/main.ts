@@ -34,8 +34,8 @@ async function bootstrap() {
   });
 
   const swaggerConfig = new DocumentBuilder()
-    .setTitle('template-nest API')
-    .setDescription('API base de template-nest para construir nuevos servicios')
+    .setTitle('task-hub API')
+    .setDescription('Dashboard unificado de tareas: Apple Reminders + Todoist')
     .setVersion('1.0')
     .addBearerAuth()
     .build();

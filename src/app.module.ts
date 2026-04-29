@@ -5,9 +5,7 @@ import { ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 import { ENV_KEYS } from '@config/env.constants.js';
 import { EnvModule } from './config/env.module';
-import { DatabaseModule } from './database/database.module';
 import { HealthModule } from './health/health.module';
-import { ExampleModule } from './modules/example/example.module';
 import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { GLOBAL_VALIDATION_PIPE } from './common/pipes/validation.pipe';
@@ -43,9 +41,7 @@ import { GLOBAL_VALIDATION_PIPE } from './common/pipes/validation.pipe';
       }),
     }),
 
-    DatabaseModule,
     HealthModule,
-    ExampleModule,
   ],
   providers: [
     { provide: APP_FILTER, useClass: GlobalExceptionFilter },

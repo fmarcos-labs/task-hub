@@ -7,9 +7,10 @@ export const EnvModule = ConfigModule.forRoot({
     NODE_ENV: Joi.string()
       .valid('development', 'production', 'test')
       .default('development'),
-    PORT: Joi.number().default(3000),
-    DATABASE_URL: Joi.string().required(),
-    CORS_ORIGINS: Joi.string().default('http://localhost:3001'),
+    PORT: Joi.number().default(3002),
+    TODOIST_API_TOKEN: Joi.string().required(),
+    CACHE_TTL_SECONDS: Joi.number().integer().positive().default(300),
+    CORS_ORIGINS: Joi.string().default('http://localhost:3002'),
     PINO_LOG_LEVEL: Joi.string()
       .valid('trace', 'debug', 'info', 'warn', 'error', 'fatal')
       .default('info'),
