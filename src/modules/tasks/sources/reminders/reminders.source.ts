@@ -12,8 +12,8 @@ export class RemindersSource implements ITaskSource {
   async fetch(): Promise<UnifiedTaskDto[]> {
     try {
       const start = Date.now();
-      const output = await runRemindctl();
-      const tasks = (output.reminders ?? []).map(toUnifiedTask);
+      const reminders = await runRemindctl();
+      const tasks = reminders.map(toUnifiedTask);
       this.logger.log(
         `Fetched ${tasks.length} reminders in ${Date.now() - start}ms`,
       );

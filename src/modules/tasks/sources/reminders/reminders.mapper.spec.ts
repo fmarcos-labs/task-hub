@@ -10,8 +10,9 @@ describe('reminders.mapper', () => {
         title: 'Buy milk',
         dueDate: '2024-01-15T10:00:00Z',
         isCompleted: false,
-        priority: 5,
-        list: { name: 'Groceries' },
+        priority: 'medium',
+        listID: 'list-1',
+        listName: 'Groceries',
       };
 
       const result = toUnifiedTask(reminder);
@@ -25,66 +26,76 @@ describe('reminders.mapper', () => {
       expect(result.completed).toBe(false);
     });
 
-    it('should map priority 9 to HIGH', () => {
+    it('should map priority "high" to HIGH', () => {
       const reminder: RemindctlReminder = {
         id: '1',
         title: 'High priority',
         isCompleted: false,
-        priority: 9,
+        priority: 'high',
+        listID: 'list-1',
+        listName: 'Work',
       };
 
       const result = toUnifiedTask(reminder);
       expect(result.priority).toBe(TaskPriority.HIGH);
     });
 
-    it('should map priority 5 to MEDIUM', () => {
+    it('should map priority "medium" to MEDIUM', () => {
       const reminder: RemindctlReminder = {
         id: '2',
         title: 'Medium priority',
         isCompleted: false,
-        priority: 5,
+        priority: 'medium',
+        listID: 'list-1',
+        listName: 'Work',
       };
 
       const result = toUnifiedTask(reminder);
       expect(result.priority).toBe(TaskPriority.MEDIUM);
     });
 
-    it('should map priority 1 to LOW', () => {
+    it('should map priority "low" to LOW', () => {
       const reminder: RemindctlReminder = {
         id: '3',
         title: 'Low priority',
         isCompleted: false,
-        priority: 1,
+        priority: 'low',
+        listID: 'list-1',
+        listName: 'Work',
       };
 
       const result = toUnifiedTask(reminder);
       expect(result.priority).toBe(TaskPriority.LOW);
     });
 
-    it('should map priority 0 to NONE', () => {
+    it('should map priority "none" to NONE', () => {
       const reminder: RemindctlReminder = {
         id: '4',
         title: 'No priority',
         isCompleted: false,
-        priority: 0,
+        priority: 'none',
+        listID: 'list-1',
+        listName: 'Work',
       };
 
       const result = toUnifiedTask(reminder);
       expect(result.priority).toBe(TaskPriority.NONE);
     });
 
-    it('should handle missing optional fields', () => {
+    it('should handle missing optional dueDate', () => {
       const reminder: RemindctlReminder = {
         id: '5',
         title: 'Minimal reminder',
         isCompleted: true,
-        priority: 0,
+        priority: 'none',
+        listID: 'list-1',
+        listName: 'Inbox',
       };
 
       const result = toUnifiedTask(reminder);
 
       expect(result.dueDate).toBeUndefined();
-      expect(result.list).toBeUndefined();
+      expect(result.list).toBe('Inbox');
       expect(result.completed).toBe(true);
     });
   });

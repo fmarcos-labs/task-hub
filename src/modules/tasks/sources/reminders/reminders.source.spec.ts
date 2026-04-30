@@ -26,17 +26,17 @@ describe('RemindersSource', () => {
 
   describe('fetch', () => {
     it('should return mapped tasks on success', async () => {
-      const mockOutput = {
-        reminders: [
-          {
-            id: '123',
-            title: 'Test task',
-            isCompleted: false,
-            priority: 5,
-          },
-        ],
-      };
-      (runRemindctl as jest.Mock).mockResolvedValue(mockOutput);
+      const mockReminders = [
+        {
+          id: '123',
+          title: 'Test task',
+          isCompleted: false,
+          priority: 'none',
+          listID: 'list-1',
+          listName: 'Inbox',
+        },
+      ];
+      (runRemindctl as jest.Mock).mockResolvedValue(mockReminders);
 
       const result = await source.fetch();
 
@@ -57,7 +57,7 @@ describe('RemindersSource', () => {
     });
 
     it('should return empty array when no reminders', async () => {
-      (runRemindctl as jest.Mock).mockResolvedValue({ reminders: [] });
+      (runRemindctl as jest.Mock).mockResolvedValue([]);
 
       const result = await source.fetch();
 

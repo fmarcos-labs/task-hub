@@ -12,6 +12,7 @@ Dashboard unificado de tareas del Mac Mini personal.
 ## El problema
 
 Las tareas están distribuidas en dos lugares:
+
 - **Apple Reminders** — recordatorios personales, sincronizados con iPhone
 - **Todoist** — tareas de proyectos y trabajo
 
@@ -20,6 +21,7 @@ No hay una vista única que los muestre juntos.
 ## La solución
 
 Un servidor NestJS corriendo en el Mac Mini que:
+
 1. Lee Apple Reminders via `remindctl` (CLI local con TCC ya autorizado)
 2. Consulta Todoist REST API
 3. Unifica ambas fuentes en un solo endpoint
@@ -88,12 +90,14 @@ THROTTLE_LIMIT=100
 ## Cloudflare Tunnel
 
 Agregar a `~/.cloudflared/config.yml`:
+
 ```yaml
 - hostname: tasks.fmarcos.dev
   service: http://localhost:3002
 ```
 
 Luego:
+
 ```bash
 cloudflared tunnel route dns mac-mini tasks.fmarcos.dev
 launchctl unload ~/Library/LaunchAgents/com.cloudflare.cloudflared.plist
@@ -112,14 +116,16 @@ pm2 save
 
 ## Checklist de implementación
 
-- [ ] Adaptar template: renombrar, quitar Prisma/DB, quitar ExampleModule
-- [ ] Agregar ENV_KEYS para TODOIST_API_TOKEN y CACHE_TTL_SECONDS
-- [ ] Crear `TasksModule` con controller + service
-- [ ] Implementar `fetchReminders()` via remindctl subprocess
-- [ ] Implementar `fetchTodoist()` via REST API
-- [ ] Caché en memoria con refresh periódico
-- [ ] Swagger documentado
-- [ ] Health endpoint sin DB
-- [ ] .env configurado con token real
-- [ ] PM2 corriendo
-- [ ] Cloudflare tunnel apuntando a puerto 3002
+- [x] Adaptar template: renombrar, quitar Prisma/DB, quitar ExampleModule
+- [x] Agregar ENV_KEYS para TODOIST_API_TOKEN y CACHE_TTL_SECONDS
+- [x] Crear `TasksModule` con controller + service
+- [x] Implementar `fetchReminders()` via remindctl subprocess
+- [x] Implementar `fetchTodoist()` via REST API (Todoist API v1 con paginación completa)
+- [x] Caché en memoria con refresh periódico
+- [x] Swagger documentado
+- [x] Health endpoint sin DB
+- [x] .env configurado con token real
+- [x] PM2 corriendo
+- [x] Cloudflare tunnel apuntando a puerto 3002
+- [x] OpenClaw skill (`~/.openclaw/workspace/skills/task-hub/`) conectada al API
+- [ ] `remindctl authorize` presencial — Reminders pendiente de permisos TCC
