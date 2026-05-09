@@ -8,9 +8,8 @@ export class TasksService {
 
   constructor(private readonly cache: TasksCacheService) {}
 
-  async getTasks(): Promise<UnifiedTaskDto[]> {
+  getTasks(): UnifiedTaskDto[] {
     this.logger.debug('Getting tasks from cache');
-    await Promise.resolve();
     return this.cache.getAll();
   }
 

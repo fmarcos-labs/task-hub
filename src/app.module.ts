@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR, APP_PIPE } from '@nestjs/core';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
-import { ScheduleModule } from '@nestjs/schedule';
 import { ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
 import { ENV_KEYS } from '@config/env.constants.js';
@@ -15,7 +14,6 @@ import { GLOBAL_VALIDATION_PIPE } from './common/pipes/validation.pipe';
 @Module({
   imports: [
     EnvModule,
-    ScheduleModule.forRoot(),
 
     LoggerModule.forRootAsync({
       inject: [ConfigService],

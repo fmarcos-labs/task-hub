@@ -5,7 +5,6 @@ import {
   OnModuleDestroy,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { Interval } from '@nestjs/schedule';
 import { ENV_KEYS } from '@config/env.constants';
 import { TasksCacheService } from './tasks-cache.service';
 
@@ -37,12 +36,5 @@ export class TasksRefreshScheduler implements OnModuleInit, OnModuleDestroy {
       clearInterval(this.intervalId);
       this.logger.log('Periodic cache refresh stopped');
     }
-  }
-
-  @Interval(300000)
-  handleCron() {
-    this.logger.debug(
-      'Cron interval triggered (fallback for @Interval decorator)',
-    );
   }
 }

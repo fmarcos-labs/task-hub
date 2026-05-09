@@ -20,9 +20,9 @@ export class TodoistSource implements ITaskSource {
       ]);
 
       const projectsById = new Map(projects.map((p) => [p.id, p]));
-      const unifiedTasks = tasks.map((task) =>
-        toUnifiedTask(task, projectsById),
-      );
+      const unifiedTasks = tasks
+        .filter((task) => !task.checked)
+        .map((task) => toUnifiedTask(task, projectsById));
 
       this.logger.log(
         `Fetched ${unifiedTasks.length} Todoist tasks in ${Date.now() - start}ms`,

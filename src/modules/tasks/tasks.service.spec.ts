@@ -33,7 +33,7 @@ describe('TasksService', () => {
   });
 
   describe('getTasks', () => {
-    it('should return tasks from cache', async () => {
+    it('should return tasks from cache', () => {
       const mockTasks = [
         {
           id: 'rem-123',
@@ -45,7 +45,7 @@ describe('TasksService', () => {
       ];
       (cache.getAll as jest.Mock).mockReturnValue(mockTasks);
 
-      const tasks = await service.getTasks();
+      const tasks = service.getTasks();
 
       expect(tasks).toEqual(mockTasks);
       expect(cache.getAll).toHaveBeenCalled();

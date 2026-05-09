@@ -19,7 +19,7 @@ export class TasksController {
     type: [UnifiedTaskDto],
   })
   async getTasks(@Res() reply: FastifyReply) {
-    const tasks = await this.tasksService.getTasks();
+    const tasks = this.tasksService.getTasks();
     await reply.status(HttpStatus.OK).send(tasks);
   }
 

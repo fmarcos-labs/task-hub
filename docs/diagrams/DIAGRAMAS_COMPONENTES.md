@@ -11,7 +11,7 @@ flowchart LR
     PM2[PM2 supervisor<br/>Mac Mini]
     API[task-hub<br/>NestJS+Fastify<br/>:3002]
     Reminders[Apple Reminders<br/>via remindctl CLI]
-    Todoist[Todoist REST API v2]
+    Todoist[Todoist REST API v1]
 
     User -->|HTTPS| CF
     CF -->|http localhost:3002| API
@@ -28,7 +28,7 @@ flowchart TB
         Controller[TasksController<br/>GET /tasks · /tasks/refresh]
         Service[TasksService]
         Cache[TasksCacheService<br/>in-memory + dedup]
-        Scheduler[TasksRefreshScheduler<br/>@Interval CACHE_TTL_SECONDS]
+        Scheduler[TasksRefreshScheduler<br/>setInterval onModuleInit]
         RemSrc[RemindersSource<br/>implements TaskSource]
         TodSrc[TodoistSource<br/>implements TaskSource]
         TodClient[TodoistClient<br/>fetch + AbortController]

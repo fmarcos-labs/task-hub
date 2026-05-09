@@ -33,7 +33,7 @@ Un servidor NestJS corriendo en el Mac Mini que:
 Mac Mini
 ├── remindctl (subprocess --json)  ──┐
 │                                    ├──▶ NestJS Server (puerto 3002)
-└── Todoist REST API v2              ─┘       │
+└── Todoist REST API v1              ─┘       │
                                              ├── GET /api/v1/tasks
                                              ├── GET /api/v1/tasks/refresh
                                              ├── GET /api/v1/health

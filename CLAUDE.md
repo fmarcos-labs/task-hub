@@ -71,6 +71,7 @@ NestJS sobre Fastify. Bootstrap en `src/main.ts`: Helmet, CORS, Swagger en `/doc
 - **Actualizar specs al cambiar interfaces**: al renombrar campos de un type/interface, buscar y corregir todos los `*.spec.ts` que usen ese tipo como fixture — el compilador no siempre detecta fixtures con casteos parciales.
 - **Todoist API v1**: base URL `https://api.todoist.com/api/v1`. Respuestas paginadas con `{ results: [], next_cursor: string|null }`. La `rest/v2` devuelve 410 Gone.
 - **remindctl**: no tiene flag `--output`. Leer siempre desde stdout del proceso.
+- **Simetría entre fuentes (`ITaskSource`)**: al agregar filtrado en una fuente, verificar que TODAS las implementaciones de la interfaz apliquen el mismo filtro. Un filtro en `RemindersSource` ausente en `TodoistSource` es un bug silencioso.
 
 ## Convenciones específicas
 
