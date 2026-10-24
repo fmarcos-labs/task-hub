@@ -9,10 +9,20 @@ jobs:
       PATH: /opt/homebrew/opt/node@22/bin:/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
     steps:
       - uses: actions/checkout@v4
+      - name: Validar .env en el host
+        run: test -f "$HOME/apps/task-hub/.env" || { echo "falta $HOME/apps/task-hub/.env"; exit 1; }
       - run: pnpm install
       - run: pnpm build
+      # pm2 corre task-hub desde ~/apps/task-hub: el build del workspace del runner hay que llevarlo ahí,
+      # si no `pm2 reload` recarga el código viejo y el deploy sale verde sin haber cambiado nada.
+      - name: Sincronizar build a ~/apps/task-hub
+        run: |
+          rsync -a --delete \
+            --exclude='.git' --exclude='.env' \
+            $GITHUB_WORKSPACE/ $HOME/apps/task-hub/
       - name: Deploy con PM2
         run: |
+          cd $HOME/apps/task-hub
           if pm2 describe "task-hub" > /dev/null 2>&1; then
             pm2 reload "task-hub" --update-env
           else

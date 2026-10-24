@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project context
 
-`task-hub` es una API REST NestJS corriendo en el Mac Mini personal que unifica tareas de Apple Reminders y Todoist en un solo endpoint. Está en producción en `tasks.fmarcos.dev` vía Cloudflare Tunnel y es consumida por una skill de OpenClaw (`~/.openclaw/workspace/skills/task-hub/`) para responder consultas de tareas desde Telegram.
+`task-hub` es una API REST NestJS corriendo en el Mac Mini personal que unifica tareas de Apple Reminders y Todoist en un solo endpoint. Está en producción en `tasks.fmarcos.dev` vía Cloudflare Tunnel y es consumida por Hermes (skill `kz_tasks` en `~/.hermes/skills/productivity/kz_tasks/` del Mac Mini, y su cron «Pending Tasks» de las 05:00) para responder consultas de tareas desde Telegram. Antes la consumía OpenClaw.
 
 `GET /api/v1/tasks` acepta `?source=todoist|reminders` opcional para filtrar por fuente. Sin el param devuelve todas.
 
@@ -13,9 +13,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - ✅ PM2 corriendo en puerto 3002
 - ✅ `tasks.fmarcos.dev` activo
 - ✅ Todoist API v1 con paginación completa (139+ tareas)
-- ✅ OpenClaw skill funcionando (`openclaw skills list` muestra `task-hub: ready`)
+- ✅ Hermes `kz_tasks` consume `GET /api/v1/tasks`
 - ⏳ Apple Reminders: requiere `remindctl authorize` presencial (permisos TCC)
-- ✅ Deploy automático: push a `main` en `fmarcos-labs` → runner → `pnpm build` → `pm2 reload`
+- Deploy automático: push a `main` en `fmarcos-labs` → runner `mac-mini` → `pnpm build` → `rsync` a `~/apps/task-hub` → `pm2 reload`. El repo es **público**: el runner group de `fmarcos-labs` tiene que permitir repos públicos, o el job queda 24 h en cola y se cancela (pasó del 2026-04-30 al 2026-10-24: producción quedó en `174a9a4`)
 
 ## Comandos
 
@@ -38,7 +38,7 @@ Pipeline de commits: husky + lint-staged corre `eslint --fix` + `prettier --writ
 ## Arquitectura
 
 ```
-Telegram → OpenClaw skill → GET http://localhost:3002/api/v1/tasks
+Telegram → Hermes (kz_tasks) → GET http://localhost:3002/api/v1/tasks
                                         ↓
                            TasksCacheService (in-memory, refresh 5min)
                                    ↙           ↘
@@ -75,6 +75,7 @@ NestJS sobre Fastify. Bootstrap en `src/main.ts`: Helmet, CORS, Swagger en `/doc
 - **remindctl**: no tiene flag `--output`. Leer siempre desde stdout del proceso.
 - **Simetría entre fuentes (`ITaskSource`)**: al agregar filtrado en una fuente, verificar que TODAS las implementaciones de la interfaz apliquen el mismo filtro. Un filtro en `RemindersSource` ausente en `TodoistSource` es un bug silencioso.
 - **Decoradores HTTP solo en controllers**: `@Query()`, `@Res()`, `@Body()`, `@Param()` nunca van en services. Los services son injectable puro sin awareness HTTP — reciben valores ya parseados como argumentos normales.
+- **`pm2 reload` recarga desde la carpeta donde se registró el proceso, no desde el workspace del runner.** task-hub corre desde `~/apps/task-hub`; un deploy que compila en `_work/` y hace `pm2 reload` sale verde y deja el código viejo. Por eso `deploy.yml` sincroniza con `rsync` a `~/apps/task-hub` antes del reload (mismo patrón que `fmarcosdev.api.gateway`).
 - **Barrel exports (`index.ts`) sin extensión**: los re-exports en archivos barrel no llevan `.js` ni `.ts` (ej: `export * from './foo'`). La extensión `.js` va en imports directos de módulos, no en barrels.
 
 ## Convenciones específicas
